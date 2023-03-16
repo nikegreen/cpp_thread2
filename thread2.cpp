@@ -11,15 +11,12 @@
 
 using namespace std;
 
-//метод
-void DoWork() 
+//метод с передачей информацией в поток
+void DoWork(int a, int b) 
 {
 	cout << "start thread id=" << this_thread::get_id() << endl;
-	for (size_t i = 0; i < 10; i++)
-	{
-		cout << "id потока DoWork = " << this_thread::get_id() << " i=" << i << endl;
-		this_thread::sleep_for(chrono::microseconds(1000));
-	}
+		this_thread::sleep_for(chrono::milliseconds(8000)); //имитация долгих вычислений
+		cout << "a+b=" << a + b << endl;
 	cout << "finish thread id=" << this_thread::get_id() << endl;
 }
 
@@ -29,16 +26,16 @@ int main()
 
 	cout << "start main" << endl;
 
-	thread thread1(DoWork); // выполнение в новом потоке не в Name
-	thread thread2(DoWork); // выполнение в новом потоке не в Name
+	thread thread1(DoWork, 1, 2); // выполнение в новом потоке не в Name
+	thread thread2(DoWork, 3, 4); // выполнение в новом потоке не в Name
 	//thread1.detach(); // разъеденить потоки (или убираем detach и добавляем join внизу)
 
 	//DoWork(); // выполнение в одном потоке с main 
 
-	for (size_t i = 0; i < 10; i++)
+	for (size_t i = 0; i < 100; i++)
 	{
 		cout << "id потока Main = " << this_thread::get_id() << " i=" << i << endl;
-		this_thread::sleep_for(chrono::microseconds(500));
+		this_thread::sleep_for(chrono::milliseconds(500));
 	}
 
 	cout << "ждём когда закончит работать поток thread1" << endl;
